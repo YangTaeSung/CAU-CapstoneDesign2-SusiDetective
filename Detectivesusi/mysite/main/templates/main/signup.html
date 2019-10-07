@@ -1,0 +1,183 @@
+{% extends 'main/layout.html' %}
+{% block content %}
+<script>
+  function idcheck(){
+    tmp_id = document.getElementById('username').value;
+    if(tmp_id){
+      //alert(tmp_id);
+      $('#h_username').val(tmp_id);
+      //alert($('#h_username').val())
+      
+      form = document.hidd;
+      //                                              ==> 배열  객체를 넘긴다.
+      //form.target = "hiddenifr";   //                                                ==> target을 iframe으로 잡는다.
+      form.submit();                //                                                ==> submit 호출
+      //alert("보내졌습니다."); 
+
+    }
+    else {
+      alert('ID를 작성해주세요.');
+    }
+  }
+  function submit_chk(){
+     // if(document.getElementById("idCheck").value == "N"){
+     //  alert("아이디 중복체크를 하세요.");
+     //  return false ;
+     //  }
+    var chk_radio = document.getElementsByName('type');
+
+    var sel_type = null;
+
+    for(var i=0;i<chk_radio.length;i++){
+
+      if(chk_radio[i].checked == true){ 
+        sel_type = chk_radio[i].value;
+      }
+    }
+    if(sel_type == null){
+                alert("문/이과를 선택해주세요."); 
+      return false;    
+    }
+
+var chk_radio = document.getElementsByName('sex');
+
+    var sel_type = null;
+
+    for(var i=0;i<chk_radio.length;i++){
+
+      if(chk_radio[i].checked == true){ 
+        sel_type = chk_radio[i].value;
+      }
+    }
+    if(sel_type == null){
+                alert("성별을 선택해주세요."); 
+      return false;    
+    }
+    return true;
+}
+</script>
+<style>
+#hidden
+
+{
+
+width:0px;
+
+height:0px;
+
+border:0;
+
+}
+</style>
+
+<div class="container">
+ <!-- Page Heading/Breadcrumbs -->
+    <h1 class="mt-4 mb-3">Sign up
+    </h1>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="{% url 'main:home'%}">Home</a>
+      </li>
+      <li class="breadcrumb-item active">Sign up</li>
+    </ol>
+    {% csrf_token %}
+<form action="../idcheck/" method="post" name="hidd" id="hidd"><input type="hidden" id="h_username" name="h_username" value=""></form>
+  <iframe id="hidden" name="hiddenifr" src="/idcheck/"></iframe>
+<CENTER>
+      <!-- 로그인 박스 부분 -->
+  <section>
+        <div class="container">
+            <div class="col-md-4">
+              <div class="p-8">
+                <div class="check-container">
+<div class="signup">
+   <form align ="left" action="../../signup/" method="post">
+    <div class="check-container">
+     {% if messages %}
+        <div class="container">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                [{{ message.message }}]
+                </div>
+
+        {% endfor %}
+        </div>
+    {% endif %}
+      {% csrf_token %}
+         <div class="form-group">
+            <label for="id_username"><b>ID : </b></label>
+            <input type="text" id="username" name="username" class="form-control" required id="id_username" placeholder="ID" value="{{id}}">
+            <button type="button" name = "chk" id="chk" onclick="idcheck()" >중복확인</button>
+            <input type="hidden" id="idCheck" name="idCheck" value="N" />
+         </div>
+
+      
+         <div class="form-group">
+            <label for="id_password1"><b>비밀번호 :</b></label>
+            <input type="password" name="password1" class="form-control" required id="id_password1"placeholder="비밀번호">
+<!--              -->
+         </div>
+      
+         <div class="form-group">
+            <label for="id_password2"><b>비밀번호 확인:</b></label>
+            <input type="password" name="password2" class="form-control" required id="id_password2"placeholder="비밀번호 확인">
+<!--              -->
+         </div>
+            <div class="form-group">
+      <b>이름 :</b> 
+      <input type="text" class="form-control" name="nickname" id="nickname"  placeholder="이름">
+      </div>
+         <div class="form-group">
+            <label for="id_email"><b>이메일 :</b></label>
+            <input type="email" name="email" class="form-control" required id="id_email" placeholder="이메일">
+<!--              -->
+         </div>
+
+        <div class="form-group">
+            <label for="type"><b>문/이과 :</b></label>
+            <input type="radio" name="type" value="문과">문과
+            <input type="radio" name="type" value="이과">이과
+         </div>
+
+         <div class="form-group">
+            <label for="sex"><b>성별 :</b></label>
+            <input type="radio" name="sex" value="남">남
+            <input type="radio" name="sex" value="여">여
+         </div>
+
+         <div class="form-group">
+          <label for="h_type"><b>고등학교 유형 :</b></label>
+             <select style="width:100%" id="h_type" name="h_type" class="form-control">
+                <option>고등학교 유형을 선택해주세요</option>
+                <option value="일반인문계">일반인문계고등학교</option>
+                <option value="실업계">실업계고등학교</option>
+                <option value="특성화">특성화고등학교</option>
+             </select>
+         </div>
+<!--       {% for field in signup_form %}
+         <div class="form-group{% if field.errors %} has-error{% endif %}">
+            {{ field.label_tag }}
+            {{ field }}
+            {% if field.errors %}
+               {% for error in field.errors %}
+               <span class="help-block">{{ error }}</span>
+               {% endfor %}
+            {% endif %}
+         </div>
+      {% endfor %} -->
+      
+      {% if signup_form.non_field_errors %}
+         {% for error in login_form.non_field_errors %}
+         <p class="text-danger"><b>{{ error }}</b></p>
+         {% endfor %}
+      {% endif %}
+      <input type="submit" class="btn btn-secondary btn-block" onclick ="return submit_chk()"></button>
+   </form>
+</div>
+</div>
+              </div>
+            </div>
+          </section>
+        </CENTER>
+      </div>
+{% endblock %}

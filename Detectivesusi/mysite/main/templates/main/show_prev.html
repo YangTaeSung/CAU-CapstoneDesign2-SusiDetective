@@ -1,0 +1,137 @@
+{% load static %}
+<style type="text/css">
+	#footer {
+
+    position:absolute;
+
+    bottom:0;
+
+    width:100%;
+
+    height:70px;   
+
+    background:#ccc;
+
+}
+</style>
+    <!-- Bootstrap CSS 로드-->
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/modern-business.css' %}" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="{% static 'css/style.css' %}"> -->
+      <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<div class="container">
+ <!-- Page Heading/Breadcrumbs -->
+ <h5>result created date : {{s.ch_val.created_date}}</h5>
+	<div class="card">
+  <div class="card-header">
+   Show your search Result
+  </div>
+
+  <div class="card-body">
+    
+      <div class="accordion" id="myAccordion">
+         <div class="card">
+           <button style="width:100%" type="button" class="btn btn-warning" data-toggle="collapse" data-target="#collapsible-1" data-parent="#myAccordion">소신</button>
+           {% if s1_history %}
+           {% for s in s1_history %}
+          <div id="collapsible-1" class="collapse show">
+         
+          <div class="accordion" id="myAccordion-1">
+            <div class="panel">
+              <div class="card">
+                <center><button style="width:100%" type="button" class="btn btn-light" data-toggle="collapse" data-target="#collapsible-1s{{s.id}}" data-parent="#myAccordion-1">{{s.c_name}} {{s.c_name.d_name}}</button></center>
+                <div id="collapsible-1s{{s.id}}" class="collapse">
+                  <strong>지역 :</strong> <span>서울/인천/경기</span> <br>
+                  <strong>대학 :</strong> <span>{{s.c_name}}</span> <br>
+                  <strong>학과 :</strong> <span>{{s.c_name.d_name}}</span> <br>
+                  <strong>전형명 :</strong> <span>{{s.c_name.admission}}</span> <br>
+                  <strong>전형방법 :</strong> <span>{{s.c_name.ad_info}}</span> <br>
+                  <a href='../hap/?id={{s.c_name.id}}'><span class="badge badge-pill badge-info" >합격자 수기 보기</span></a>
+                  <a href="../media/2020/{{s.c_name}}.pdf"><span class="badge badge-pill badge-info">2020년도 모집요강 보기</span><br/></a>
+                </div>
+             </div>
+            </div>
+        </div>
+        
+      </div>
+                  {% endfor%}
+            {% endif %}
+                  
+    </div>
+      
+    </div>
+  </div>
+    <div class="panel">
+          <div class="card">
+            <div class="card-body">
+              
+        <button style="width:100%" type="button" class="btn btn-info " data-toggle="collapse" data-target="#collapsible-2" data-parent="#myAccordion">적정</button>
+                   {% if s2_history %}
+           {% for s in s2_history %}
+        <div id="collapsible-2" class="collapse show">
+          <div class="accordion" id="myAccordion-2">
+            <div class="panel">
+                  <div class="card">
+              <center><button style="width:100%" type="button" class="btn btn-light" data-toggle="collapse" data-target="#collapsible-2s{{s.id}}" data-parent="#myAccordion-2">{{s.c_name}} {{s.c_name.d_name}}</button></center>
+              <div id="collapsible-2s{{s.id}}" class="collapse">
+                  <span>
+                  <strong>지역 :</strong> <span>서울/인천/경기</span> <br>
+                  <strong>대학 :</strong> <span>{{s.c_name}}</span> <br>
+                  <strong>학과 :</strong> <span>{{s.c_name.d_name}}</span> <br>
+                  <strong>전형명 :</strong> <span>{{s.c_name.admission}}</span> <br>
+                  <strong>전형방법 :</strong> <span>{{s.c_name.ad_info}}</span> <br>
+                  <a href='../hap/?id={{s.c_name.id}}'><span class="badge badge-pill badge-info">합격자 수기 보기</span></a>
+                  <a href="../media/2020/{{s.c_name}}.pdf"><span class="badge badge-pill badge-info">2020년도 모집요강 보기</span></a><br/>
+                  </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+                {% endfor%}
+            {% endif %}
+</div>
+</div>
+</div>
+
+    <div class="panel">
+      <div class="card">
+      <div class="card-body">
+        <button style="width:100%" type="button" class="btn btn-success" data-toggle="collapse" data-target="#collapsible-3" data-parent="#myAccordion">안정</button>
+        {% if s3_history %}
+            {% for s in s3_history %}
+        <div id="collapsible-3" class="collapse show">
+          <div class="accordion" id="myAccordion-3">
+            <div class="panel">
+              <div class="card">
+              <center><button style="width:100%" type="button" class="btn btn-light" data-toggle="collapse" data-target="#collapsible-3s{{s.id}}" data-parent="#myAccordion-3">{{s.c_name}} {{s.c_name.d_name}}</button></center>
+              <div id="collapsible-3s{{s.id}}" class="collapse">
+                  <span>
+                  <strong>지역 :</strong> <span>서울/인천/경기</span> <br>
+                  <strong>대학 :</strong> <span>{{s.c_name}}</span> <br>
+                  <strong>학과 :</strong> <span>{{s.c_name.d_name}}</span> <br>
+                  <strong>전형명 :</strong> <span>{{s.c_name.admission}}</span> <br>
+                  <strong>전형방법 :</strong> <span>{{s.c_name.ad_info}}</span> <br>
+                  <a href='../hap/?id={{s.c_name.id}}'><span class="badge badge-pill badge-info">합격자 수기 보기</span></a>
+                  <a href="../media/2020/{{s.c_name}}.pdf"><span class="badge badge-pill badge-info">2020년도 모집요강 보기</span></a><br/>
+                  </span>
+              </div>
+            
+            </div>
+          </div>
+          </div>
+        </div>
+                          {% endfor%}
+            {% endif %}
+      </div>
+    </div>  
+
+  </div>
+</div>
+</div>
+    <br>
+
+<br>

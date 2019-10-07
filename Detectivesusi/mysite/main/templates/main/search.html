@@ -1,0 +1,84 @@
+{% extends "main/layout.html" %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/search.css' %}">
+<script language="javascript">
+      function acceptedCheck() {
+        var flag=true;
+            if (!$('#acceptTerm').is(':checked')) {
+            alert('약관에 동의해야 분석 하실 수 있습니다.');
+            $('#acceptTerm').focus();
+            flag=false;
+            return false;   // false 리턴하여 페이지이동 차단
+        }
+        if(flag==true)
+            location.replace("/searchWork?current_chk=1");
+    }
+</script>
+
+{% if user.is_authenticated %} 
+  <!-- Page Content -->
+  <div class="container">
+
+    <!-- Page Heading/Breadcrumbs -->
+    <h1 class="mt-4 mb-3">Search
+    </h1>
+
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="{% url 'main:home'%}">Home</a>
+      </li>
+      <li class="breadcrumb-item active">Search</li>
+    </ol>
+
+    <center>
+    <form>
+      <section>
+        <div class="container">
+            <div class="col-md-6 order-1">
+              <div class="p-6">
+                <h2 class="display-5">* Search Information *</h2>
+                <h5 class="display-6">분석 결과는 Mypage 에서 다시 확인가능합니다.</h5>
+                <h5 class="display-6"></h5>
+                <br>
+            <div class="terms">
+                <p>이용약관</p>
+                <p>제1조(목적)</p>
+                <p>제2조(정의)</p>
+                <p>제3조(약관)</p>
+            </div>
+                <div class="check-container">
+                    <!-- 이용약관 체크 -->
+                    <div class="form-check has-border-bottom">
+                        <label class="form-check-label">
+                        <input type="checkbox" class="form-check-input" id="acceptTerm">
+                            <span>이용 약관에 동의합니다.</span>
+                        </label>
+                    </div>
+                </div>
+                <b><a class="btn btn-secondary btn-block" href="#" onclick="return acceptedCheck()">분석시작</a></b>
+                <p></p>
+              </div>
+          </div>
+        </div>
+      </section>
+  </div>
+</center>
+
+  </div>
+  <!-- /.container -->
+  {% if input_datas %}
+{% else %}
+  <script>
+    //내신 입력한 데이터 없으면 입력하라고 질문
+    alert('입력하신 데이터가 없습니다. \n내신 입력을 먼저 해주세요!!');
+    location.href="../mypage/?igrade=11";
+  </script>
+{% endif %}
+  {% else %}
+  <script type="text/javascript">
+    alert('로그인이 필요합니다! \n로그인 화면으로 이동합니다.')
+    window.location.href = '/login';
+  </script>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'main/layout.html' %}
+{% block content %}
+  <div class="container">
+
+ <!-- Page Heading/Breadcrumbs -->
+    <h1 class="mt-4 mb-3">Login
+    </h1>
+
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="{% url 'main:home'%}">Home</a>
+      </li>
+      <li class="breadcrumb-item active">Login</li>
+    </ol>
+
+    <CENTER>
+      <!-- 로그인 박스 부분 -->
+  <section>
+        <div class="container">
+            <div class="col-md-4">
+              <div class="p-8">
+                <div class="login">
+                  <form align="left" action="" method="post">
+
+                   {% csrf_token %}
+                          <div class="form-group">
+                      <label for="id_username"><b>ID :</b></label> 
+                      <input type="text" name="username" class="form-control" required id="id_username">
+                      
+                    </div>
+      
+                    <div class="form-group">
+                      <label for="id_password"><b>비밀번호 :</b></label> 
+                      <input type="password" name="password" class="form-control" required id="id_password">
+                      
+                    </div>
+      <button class="btn btn-secondary btn-block">login</button>
+   </form>
+</div>
+</div>
+              </div>
+          </div>
+        </div>
+      </section>
+    </CENTER>
+ </div>
+
+{% endblock %}

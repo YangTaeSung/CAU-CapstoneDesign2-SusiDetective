@@ -1,0 +1,1475 @@
+{% extends "main/layout.html" %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/search.css' %}">
+{% if user.is_authenticated %} 
+
+  <!-- Page Content -->
+  <div class="container">
+
+    <!-- Page Heading/Breadcrumbs -->
+    <h1 class="mt-4 mb-3">Search
+    </h1>
+
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="{% url 'main:home'%}">Home</a>
+      </li>
+      <li class="breadcrumb-item active">Search</li>
+    </ol>
+<center>
+    <table align =center cellspacing=1 width=200 border=0>
+    <tr>
+        <td>총 진행횟수: {{ current_chk}} / 4 <!-- {{ totalSchCnt }} --></td>
+    </tr>
+</table>
+
+{% if current_chk|add:0 == 1 %}
+{% if chk_value %}
+<script
+  src="https://code.jquery.com/jquery-1.4.4.min.js"
+  integrity="sha256-UXNk8tRRYvtQN0N7W2y5U9ANmys7ebqH2f5X6m7mBww="
+  crossorigin="anonymous">
+  </script>
+
+<script>
+    //alert("기존에 양식을 가져오시겠습니까?");
+    $(document).ready(function() {
+jQuery.cookie = function(name, value, options) {
+    if (typeof value != 'undefined') { // name and value given, set cookie
+        options = options || {};
+        if (value === null) {
+            value = '';
+            options.expires = -1;
+        }
+        var expires = '';
+        if (options.expires && (typeof options.expires == 'number' || options.expires.toUTCString)) {
+            var date;
+            if (typeof options.expires == 'number') {
+                date = new Date();
+                date.setTime(date.getTime() + (options.expires * 24 * 60 * 60 * 1000));
+            } else {
+                date = options.expires;
+            }
+            expires = '; expires=' + date.toUTCString(); // use expires attribute, max-age is not supported by IE
+        }
+        var path = options.path ? '; path=' + (options.path) : '';
+        var domain = options.domain ? '; domain=' + (options.domain) : '';
+        var secure = options.secure ? '; secure' : '';
+        document.cookie = [name, '=', encodeURIComponent(value), expires, path, domain, secure].join('');
+    } else { // only name given, get cookie
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+};
+
+/* Here's the actual code. */
+
+if($.cookie('remember_select') != null) {
+    $('#preferRegions0 option[value="' + $.cookie('remember_select') + '"]').attr('selected', 'selected');
+    $('#preferRegions1 option[value="' + $.cookie('remember_select2') + '"]').attr('selected', 'selected');
+    $('#preferRegions2 option[value="' + $.cookie('remember_select3') + '"]').attr('selected', 'selected');
+    $('#college0 option[value="' + $.cookie('remember_select4') + '"]').attr('selected', 'selected');
+    $('#college1 option[value="' + $.cookie('remember_select5') + '"]').attr('selected', 'selected');
+    $('#college2 option[value="' + $.cookie('remember_select6') + '"]').attr('selected', 'selected');
+    $('#college3 option[value="' + $.cookie('remember_select7') + '"]').attr('selected', 'selected');
+    $('#college4 option[value="' + $.cookie('remember_select8') + '"]').attr('selected', 'selected');
+    $('#college5 option[value="' + $.cookie('remember_select9') + '"]').attr('selected', 'selected');
+}
+
+$("#preferRegions0").change(function() {
+    $.cookie('remember_select', $('#preferRegions0 option:selected').val(), { expires: 90, path: '/'});
+});
+
+$("#preferRegions1").change(function() {
+    $.cookie('remember_select2', $('#preferRegions1 option:selected').val(), { expires: 90, path: '/'});
+});
+
+$("#preferRegions2").change(function() {
+    $.cookie('remember_select3', $('#preferRegions2 option:selected').val(), { expires: 90, path: '/'});
+});
+
+$("#college0").change(function() {
+    $.cookie('remember_select4', $('#college0 option:selected').val(), { expires: 90, path: '/'});
+});
+
+$("#college1").change(function() {
+    $.cookie('remember_select5', $('#college1 option:selected').val(), { expires: 90, path: '/'});
+});
+
+$("#college2").change(function() {
+    $.cookie('remember_select6', $('#college2 option:selected').val(), { expires: 90, path: '/'});
+});
+
+$("#college3").change(function() {
+    $.cookie('remember_select7', $('#college3 option:selected').val(), { expires: 90, path: '/'});
+});
+
+$("#college4").change(function() {
+    $.cookie('remember_select8', $('#college4 option:selected').val(), { expires: 90, path: '/'});
+});
+$("#college5").change(function() {
+    $.cookie('remember_select9', $('#college5 option:selected').val(), { expires: 90, path: '/'});
+});
+
+//SELECT 옵션 들 중복 방지
+$("select").each(function(cSelect) {
+    $(this).data('stored-value', $(this).val());
+  });
+
+  $("select").change(function() {
+    var cSelected = $(this).val();
+    var cPrevious = $(this).data('stored-value');
+    $(this).data('stored-value', cSelected);
+
+    var otherSelects = $("select").not(this);
+    otherSelects.find('option[value=' + cPrevious + ']').removeAttr('disabled');
+    otherSelects.find('option[value=' + cSelected + ']').attr('disabled', 'disabled');
+  });
+
+});
+
+</script>
+{% endif %}
+                <div class="selfCheckForm">
+                    <form method="post" name=chk1form action="/save_chk1/">
+                        <div id="selfcheck2">
+                            <div class="form-group">
+                                <div class="form-desc">
+                                    <div class="form-label">
+                                    <span>
+                                      <strong>1. 선호지역 선택</strong><br/>
+                                        ※ 2개 항목 선택 필수, 최대 3개 선택 가능<br/>
+                                        ※ 선택 항목은 우선 순위 없이 일괄 적용됩니다.<br/>
+                                        ※ 전문 대학은 추천 대학에서 제외됩니다.<br/>
+                                        ※ 현재는 서울/인천/경기 지역과 지방 거점 국립대 만 서비스됩니다. ※
+                                    </span>
+                                    </div>
+                                </div>
+                                <select style="margin-bottom: 5px;"
+                                        class="form-control preferRegions" name="preferRegions0" id="preferRegions0"onFocus='this.initialSelect = this.selectedIndex;'>
+                                        <!--변경 방지 onChange='this.selectedIndex = this.initialSelect;' -->
+                                    <option value="-1" >터치하면 리스트가 보입니다.</option>
+                                    <option
+                                            value="서울인천경기" selected="selected">서울/인천/경기</option>
+                                    <option
+                                            value="지방거점국립대">지방 거점 국립대</option>
+                                </select>
+                                 <select style="margin-bottom: 5px;"
+                                        class="form-control preferRegions" name="preferRegions1" id="preferRegions1" onFocus='this.initialSelect = this.selectedIndex;'>
+                                    <option value="-1" selected="selected" readonly>터치하면 리스트가 보입니다.</option>
+                                    <option
+                                            value="서울인천경기">서울/인천/경기</option>
+                                    <option
+                                            value="지방거점국립대" selected="selected">지방 거점 국립대</option>
+                                </select>
+                                 <select style="margin-bottom: 5px;"
+                                        class="form-control preferRegions" name="preferRegions2" id="preferRegions2"onFocus='this.initialSelect = this.selectedIndex;'>
+                                    <option value="-1" selected="selected">터치하면 리스트가 보입니다.</option>
+                                    <option
+                                            value="서울인천경기" >서울/인천/경기</option>
+                                    <option
+                                            value="지방거점국립대">지방 거점 국립대</option>
+                                </select>
+                            </div>
+
+                            <div class="bar"></div>
+                            <div class="form-group">
+                                <div class="form-desc">
+                                    <div class="form-label">
+                                        <span>
+                                          <strong>2. 선호 계열 선택</strong><br/>
+                                            ※ 2개 항목 선택 필수, 최대 6개 선택 가능<br/>
+                                            ※선택 항목은 우선 순위 없이 일괄 적용됩니다.
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <select style="margin-bottom: 5px;"
+                                        class="form-control preferColleges"
+                                        name="college0" id="college0">
+                                  <option value="-1">터치하면 리스트가 보입니다.</option>
+                                    <option value="화학">화학</option>
+                                    <option value="수학">수학</option>
+                                    <option value="생명">생명공학</option>
+                                    <option value="물리">물리</option>
+                                    <option value="의류">의류</option>
+                                    <option value="건축">건축</option>
+                                    <option value="교육">교육</option>
+                                    <option value="유아교육">유아교육</option>
+                                    <option value="아동">아동</option>
+                                    <option value="컴퓨터">컴퓨터</option>
+                                    <option value="전자">전자</option>
+                                    <option value="전기">전기</option>
+                                    <option value="환경">환경</option>
+                                    <option value="에너지">에너지</option>
+                                    <option value="원자력">원자력</option>
+                                    <option value="신소재">신소재</option>
+                                    <option value="산업">산업공학</option>
+                                    <option value="자동차">자동차</option>
+                                    <option value="기계">기계</option>
+                                    <option value="도시">도시</option>
+                                    <option value="행정">행정</option>
+                                    <option value="문학과">언어계열</option>
+                                    <option value="통번역">번역학</option>
+                                    <option value="정치">정치/외교</option>
+                                    <option value="경영">경영</option>
+                                    <option value="경제">경제</option>
+                                    <option value="사회">사회</option>
+                                    <option value="미디어">미디어</option>
+                                    <option value="법">법</option>
+                                    <option value="문화">문화</option>
+                                    <option value="심리">심리</option>
+                                    <option value="환경">환경</option>
+                                    <option value="정보">정보</option>
+                                    <option value="로봇">로봇</option>
+                                    <option value="철학">철학</option>
+                                    <option value="한문">한문</option>
+                                    <option value="의예">의과</option>
+                                    <option value="식품">식품</option>
+                                    <option value="통계">통계</option>
+                                    <option value="공공인재">공공인재</option>
+                                    <option value="간호">간호</option>
+                                    <option value="방송">방송</option>
+                                    <option value="스포츠">스포츠</option>
+                                    <option value="체육">체육</option>
+                                    <option value="약학">약학</option>
+                                    <option value="역사">역사</option>
+                                    <option value="회계">회계</option>
+                                    <option value="교통">교통</option>
+                                    <option value="토목">토목</option>
+                                    <option value="사학">사학</option>
+                                    <option value="지리">지리</option>
+                                    <option value="항공">항공</option>
+                                    <option value="우주">우주</option>
+                                    <option value="생물">생물</option>
+                                    <option value="융합">융합</option>
+                                    <option value="무역">무역</option>
+                                    <option value="부동산">부동산</option>
+                                    <option value="조경">조경</option>
+                                    <option value="디자인">디자인</option>
+                                    <option value="과학">과학계열</option>
+                                    <option value="공학">공학계열</option>
+                                </select><select style="margin-bottom: 5px;"
+                                        class="form-control preferColleges"
+                                        name="college1" id="college1">
+                                  <option value="-1">터치하면 리스트가 보입니다.</option>
+                                    <option value="화학">화학</option>
+                                    <option value="수학">수학</option>
+                                    <option value="생명">생명공학</option>
+                                    <option value="물리">물리</option>
+                                    <option value="의류">의류</option>
+                                    <option value="건축">건축</option>
+                                    <option value="교육">교육</option>
+                                    <option value="유아교육">유아교육</option>
+                                    <option value="아동">아동</option>
+                                    <option value="컴퓨터">컴퓨터</option>
+                                    <option value="전자">전자</option>
+                                    <option value="전기">전기</option>
+                                    <option value="환경">환경</option>
+                                    <option value="에너지">에너지</option>
+                                    <option value="원자력">원자력</option>
+                                    <option value="신소재">신소재</option>
+                                    <option value="산업">산업공학</option>
+                                    <option value="자동차">자동차</option>
+                                    <option value="기계">기계</option>
+                                    <option value="도시">도시</option>
+                                    <option value="행정">행정</option>
+                                    <option value="문학과">언어계열</option>
+                                    <option value="통번역">번역학</option>
+                                    <option value="정치">정치/외교</option>
+                                    <option value="경영">경영</option>
+                                    <option value="경제">경제</option>
+                                    <option value="사회">사회</option>
+                                    <option value="미디어">미디어</option>
+                                    <option value="법">법</option>
+                                    <option value="문화">문화</option>
+                                    <option value="심리">심리</option>
+                                    <option value="환경">환경</option>
+                                    <option value="정보">정보</option>
+                                    <option value="로봇">로봇</option>
+                                    <option value="철학">철학</option>
+                                    <option value="한문">한문</option>
+                                    <option value="의예">의과</option>
+                                    <option value="식품">식품</option>
+                                    <option value="통계">통계</option>
+                                    <option value="공공인재">공공인재</option>
+                                    <option value="간호">간호</option>
+                                    <option value="방송">방송</option>
+                                    <option value="스포츠">스포츠</option>
+                                    <option value="체육">체육</option>
+                                    <option value="약학">약학</option>
+                                    <option value="역사">역사</option>
+                                    <option value="회계">회계</option>
+                                    <option value="교통">교통</option>
+                                    <option value="토목">토목</option>
+                                    <option value="사학">사학</option>
+                                    <option value="지리">지리</option>
+                                    <option value="항공">항공</option>
+                                    <option value="우주">우주</option>
+                                    <option value="생물">생물</option>
+                                    <option value="융합">융합</option>
+                                    <option value="무역">무역</option>
+                                    <option value="부동산">부동산</option>
+                                    <option value="조경">조경</option>
+                                    <option value="디자인">디자인</option>
+                                    <option value="과학">과학계열</option>
+                                    <option value="공학">공학계열</option>
+                                </select><select style="margin-bottom: 5px;"
+                                        class="form-control preferColleges"
+                                        name="college2" id="college2">
+                                   <option value="-1">터치하면 리스트가 보입니다.</option>
+                                    <option value="화학">화학</option>
+                                    <option value="수학">수학</option>
+                                    <option value="생명">생명공학</option>
+                                    <option value="물리">물리</option>
+                                    <option value="의류">의류</option>
+                                    <option value="건축">건축</option>
+                                    <option value="교육">교육</option>
+                                    <option value="유아교육">유아교육</option>
+                                    <option value="아동">아동</option>
+                                    <option value="컴퓨터">컴퓨터</option>
+                                    <option value="전자">전자</option>
+                                    <option value="전기">전기</option>
+                                    <option value="환경">환경</option>
+                                    <option value="에너지">에너지</option>
+                                    <option value="원자력">원자력</option>
+                                    <option value="신소재">신소재</option>
+                                    <option value="산업">산업공학</option>
+                                    <option value="자동차">자동차</option>
+                                    <option value="기계">기계</option>
+                                    <option value="도시">도시</option>
+                                    <option value="행정">행정</option>
+                                    <option value="문학과">언어계열</option>
+                                    <option value="통번역">번역학</option>
+                                    <option value="정치">정치/외교</option>
+                                    <option value="경영">경영</option>
+                                    <option value="경제">경제</option>
+                                    <option value="사회">사회</option>
+                                    <option value="미디어">미디어</option>
+                                    <option value="법">법</option>
+                                    <option value="문화">문화</option>
+                                    <option value="심리">심리</option>
+                                    <option value="환경">환경</option>
+                                    <option value="정보">정보</option>
+                                    <option value="로봇">로봇</option>
+                                    <option value="철학">철학</option>
+                                    <option value="한문">한문</option>
+                                    <option value="의예">의과</option>
+                                    <option value="식품">식품</option>
+                                    <option value="통계">통계</option>
+                                    <option value="공공인재">공공인재</option>
+                                    <option value="간호">간호</option>
+                                    <option value="방송">방송</option>
+                                    <option value="스포츠">스포츠</option>
+                                    <option value="체육">체육</option>
+                                    <option value="약학">약학</option>
+                                    <option value="역사">역사</option>
+                                    <option value="회계">회계</option>
+                                    <option value="교통">교통</option>
+                                    <option value="토목">토목</option>
+                                    <option value="사학">사학</option>
+                                    <option value="지리">지리</option>
+                                    <option value="항공">항공</option>
+                                    <option value="우주">우주</option>
+                                    <option value="생물">생물</option>
+                                    <option value="융합">융합</option>
+                                    <option value="무역">무역</option>
+                                    <option value="부동산">부동산</option>
+                                    <option value="조경">조경</option>
+                                    <option value="디자인">디자인</option>
+                                    <option value="과학">과학계열</option>
+                                    <option value="공학">공학계열</option>
+                                </select><select style="margin-bottom: 5px;"
+                                        class="form-control preferColleges"
+                                        name="college3" id="college3">
+                                    <option value="-1">터치하면 리스트가 보입니다.</option>
+                                    <option value="화학">화학</option>
+                                    <option value="수학">수학</option>
+                                    <option value="생명">생명공학</option>
+                                    <option value="물리">물리</option>
+                                    <option value="의류">의류</option>
+                                    <option value="건축">건축</option>
+                                    <option value="교육">교육</option>
+                                    <option value="유아교육">유아교육</option>
+                                    <option value="아동">아동</option>
+                                    <option value="컴퓨터">컴퓨터</option>
+                                    <option value="전자">전자</option>
+                                    <option value="전기">전기</option>
+                                    <option value="환경">환경</option>
+                                    <option value="에너지">에너지</option>
+                                    <option value="원자력">원자력</option>
+                                    <option value="신소재">신소재</option>
+                                    <option value="산업">산업공학</option>
+                                    <option value="자동차">자동차</option>
+                                    <option value="기계">기계</option>
+                                    <option value="도시">도시</option>
+                                    <option value="행정">행정</option>
+                                    <option value="문학과">언어계열</option>
+                                    <option value="통번역">번역학</option>
+                                    <option value="정치">정치/외교</option>
+                                    <option value="경영">경영</option>
+                                    <option value="경제">경제</option>
+                                    <option value="사회">사회</option>
+                                    <option value="미디어">미디어</option>
+                                    <option value="법">법</option>
+                                    <option value="문화">문화</option>
+                                    <option value="심리">심리</option>
+                                    <option value="환경">환경</option>
+                                    <option value="정보">정보</option>
+                                    <option value="로봇">로봇</option>
+                                    <option value="철학">철학</option>
+                                    <option value="한문">한문</option>
+                                    <option value="의예">의과</option>
+                                    <option value="식품">식품</option>
+                                    <option value="통계">통계</option>
+                                    <option value="공공인재">공공인재</option>
+                                    <option value="간호">간호</option>
+                                    <option value="방송">방송</option>
+                                    <option value="스포츠">스포츠</option>
+                                    <option value="체육">체육</option>
+                                    <option value="약학">약학</option>
+                                    <option value="역사">역사</option>
+                                    <option value="회계">회계</option>
+                                    <option value="교통">교통</option>
+                                    <option value="토목">토목</option>
+                                    <option value="사학">사학</option>
+                                    <option value="지리">지리</option>
+                                    <option value="항공">항공</option>
+                                    <option value="우주">우주</option>
+                                    <option value="생물">생물</option>
+                                    <option value="융합">융합</option>
+                                    <option value="무역">무역</option>
+                                    <option value="부동산">부동산</option>
+                                    <option value="조경">조경</option>
+                                    <option value="디자인">디자인</option>
+                                    <option value="과학">과학계열</option>
+                                    <option value="공학">공학계열</option>
+                                </select><select style="margin-bottom: 5px;"
+                                        class="form-control preferColleges"
+                                        name="college4" id="college4">
+                                    <option value="-1">터치하면 리스트가 보입니다.</option>
+                                    <option value="화학">화학</option>
+                                    <option value="수학">수학</option>
+                                    <option value="생명">생명공학</option>
+                                    <option value="물리">물리</option>
+                                    <option value="의류">의류</option>
+                                    <option value="건축">건축</option>
+                                    <option value="교육">교육</option>
+                                    <option value="유아교육">유아교육</option>
+                                    <option value="아동">아동</option>
+                                    <option value="컴퓨터">컴퓨터</option>
+                                    <option value="전자">전자</option>
+                                    <option value="전기">전기</option>
+                                    <option value="환경">환경</option>
+                                    <option value="에너지">에너지</option>
+                                    <option value="원자력">원자력</option>
+                                    <option value="신소재">신소재</option>
+                                    <option value="산업">산업공학</option>
+                                    <option value="자동차">자동차</option>
+                                    <option value="기계">기계</option>
+                                    <option value="도시">도시</option>
+                                    <option value="행정">행정</option>
+                                    <option value="문학과">언어계열</option>
+                                    <option value="통번역">번역학</option>
+                                    <option value="정치">정치/외교</option>
+                                    <option value="경영">경영</option>
+                                    <option value="경제">경제</option>
+                                    <option value="사회">사회</option>
+                                    <option value="미디어">미디어</option>
+                                    <option value="법">법</option>
+                                    <option value="문화">문화</option>
+                                    <option value="심리">심리</option>
+                                    <option value="환경">환경</option>
+                                    <option value="정보">정보</option>
+                                    <option value="로봇">로봇</option>
+                                    <option value="철학">철학</option>
+                                    <option value="한문">한문</option>
+                                    <option value="의예">의과</option>
+                                    <option value="식품">식품</option>
+                                    <option value="통계">통계</option>
+                                    <option value="공공인재">공공인재</option>
+                                    <option value="간호">간호</option>
+                                    <option value="방송">방송</option>
+                                    <option value="스포츠">스포츠</option>
+                                    <option value="체육">체육</option>
+                                    <option value="약학">약학</option>
+                                    <option value="역사">역사</option>
+                                    <option value="회계">회계</option>
+                                    <option value="교통">교통</option>
+                                    <option value="토목">토목</option>
+                                    <option value="사학">사학</option>
+                                    <option value="지리">지리</option>
+                                    <option value="항공">항공</option>
+                                    <option value="우주">우주</option>
+                                    <option value="생물">생물</option>
+                                    <option value="융합">융합</option>
+                                    <option value="무역">무역</option>
+                                    <option value="부동산">부동산</option>
+                                    <option value="조경">조경</option>
+                                    <option value="디자인">디자인</option>
+                                    <option value="과학">과학계열</option>
+                                    <option value="공학">공학계열</option>
+                                </select><select style="margin-bottom: 5px;"
+                                        class="form-control preferColleges"
+                                        name="college5" id="college5">
+                                    <option value="-1">터치하면 리스트가 보입니다.</option>
+                                    <option value="화학">화학</option>
+                                    <option value="수학">수학</option>
+                                    <option value="생명">생명공학</option>
+                                    <option value="물리">물리</option>
+                                    <option value="의류">의류</option>
+                                    <option value="건축">건축</option>
+                                    <option value="교육">교육</option>
+                                    <option value="유아교육">유아교육</option>
+                                    <option value="아동">아동</option>
+                                    <option value="컴퓨터">컴퓨터</option>
+                                    <option value="전자">전자</option>
+                                    <option value="전기">전기</option>
+                                    <option value="환경">환경</option>
+                                    <option value="에너지">에너지</option>
+                                    <option value="원자력">원자력</option>
+                                    <option value="신소재">신소재</option>
+                                    <option value="산업">산업공학</option>
+                                    <option value="자동차">자동차</option>
+                                    <option value="기계">기계</option>
+                                    <option value="도시">도시</option>
+                                    <option value="행정">행정</option>
+                                    <option value="문학과">언어계열</option>
+                                    <option value="통번역">번역학</option>
+                                    <option value="정치">정치/외교</option>
+                                    <option value="경영">경영</option>
+                                    <option value="경제">경제</option>
+                                    <option value="사회">사회</option>
+                                    <option value="미디어">미디어</option>
+                                    <option value="법">법</option>
+                                    <option value="문화">문화</option>
+                                    <option value="심리">심리</option>
+                                    <option value="환경">환경</option>
+                                    <option value="정보">정보</option>
+                                    <option value="로봇">로봇</option>
+                                    <option value="철학">철학</option>
+                                    <option value="한문">한문</option>
+                                    <option value="의예">의과</option>
+                                    <option value="식품">식품</option>
+                                    <option value="통계">통계</option>
+                                    <option value="공공인재">공공인재</option>
+                                    <option value="간호">간호</option>
+                                    <option value="방송">방송</option>
+                                    <option value="스포츠">스포츠</option>
+                                    <option value="체육">체육</option>
+                                    <option value="약학">약학</option>
+                                    <option value="역사">역사</option>
+                                    <option value="회계">회계</option>
+                                    <option value="교통">교통</option>
+                                    <option value="토목">토목</option>
+                                    <option value="사학">사학</option>
+                                    <option value="지리">지리</option>
+                                    <option value="항공">항공</option>
+                                    <option value="우주">우주</option>
+                                    <option value="생물">생물</option>
+                                    <option value="융합">융합</option>
+                                    <option value="무역">무역</option>
+                                    <option value="부동산">부동산</option>
+                                    <option value="조경">조경</option>
+                                    <option value="디자인">디자인</option>
+                                    <option value="과학">과학계열</option>
+                                    <option value="공학">공학계열</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+{% endif %}
+
+{% if current_chk|add:0 == 2 %}
+<link rel="stylesheet" href="{% static 'css/isu.css' %}">
+<!-- <div class="con_box mgt50">
+                    <form name="stdptScr" id="stdptScr" method="post"> -->
+   <div class="selfCheckForm">
+                    <form method="post" name=avgform action="/save_chk/">  <!-- action edit # -> searchwork -->
+                        <div id="selfcheck3">
+                            <div class="form-group">
+                                <div id="stdView">
+
+
+                                <!-- 전교과 평균 등급 -->
+                        <div class="form-desc">
+                                    <div class="form-label">
+                                        <span>
+                                          <strong>3. 교과 평균 등급　　</strong>
+                                             <a href="../mypage/?igrade=11" class="btn_compare_off">성적수정하기</a>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <table class="input-table">
+                                    <colgroup>
+                                        <col width="60%"/>
+                                        <col width="30%"/>
+                                        <col width="50px"/>
+                                    </colgroup>
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            (필수) 전교과 평균
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" id="avgRate" name="avgRate"
+                                                       class="form-control number"
+                                                       value="{{avg_rate}}" 
+                                                       placeholder="소수점 3자리까지만 입력" readonly>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            등급
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            (옵션) 주요교과 평균
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" id="avgRate2" name="avgRate2"
+                                                       class="form-control number"
+                                                       value="{{p_avg_rate}}"
+                                                       placeholder="소수점 3자리까지만 입력" readonly>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            등급
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div align=left>
+                                    ※ 주요교과목 : 
+                                    - 국어/영어/수학 공통<br/>
+                                    - 인문계열: 사회 관련 전 과목<br/>
+                                    - 자연계열: 과학 관련 전 과목<br/><br/>
+
+<!--                                     ※ [1.00 ~ 9.00] 등급까지만 입력 가능<br/>
+                                    ※ 전교과 평균 등급 계산법<br/>
+                                    - 1학년 1학기 ~ 3학년 1학기(총 5학기)의 모든 교과목 대상<br/>
+                                    - [각 과목별 단위수]와 [석차 등급]을 곱하여 이를 모두 더한 후, [총 단위수의 합]으로 나눔<br/> -->
+                                </div>
+                                <div class="bar"></div>
+
+                                <!-- 무단 결석일수 -->
+                                <div class="form-desc">
+                                    <div class="form-label">
+                                        <span>
+                                          <strong>4. 무단 결석일수</strong>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <table class="input-table">
+                                    <colgroup>
+                                        <col width="90%"/>
+                                        <col width="50px"/>
+                                    </colgroup>
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" name="absent" class="form-control number"
+                                                       id="inputAbsent"
+                                                       placeholder="숫자만 입력" value="0">
+                                            </div>
+                                        </td>
+                                        <td>회</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+
+                                <div class="bar"></div>
+
+
+                                <!-- 수상 경력 횟수 -->
+                                <div class="form-desc">
+                                    <div class="form-label">
+                                        <span>
+                                          <strong>5. 기입된 수상 경력</strong>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <table class="input-table">
+                                    <colgroup>
+                                        <col width="60%"/>
+                                        <col width="30%"/>
+                                        <col/>
+                                    </colgroup>
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            교내 표창장/공로상 계열:
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control number" name="awardsCnt" id="awardsCnt"
+                                                       placeholder="숫자만 입력"
+                                                       value="0">
+                                            </div>
+                                        </td>
+                                        <td>회</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            교내 교과/학업성취 계열:
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control number" name="awardsCnt2" id="awardsCnt2"                                                    placeholder="숫자만 입력"
+                                                       value="0">
+                                            </div>
+                                        </td>
+                                        <td>회</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            교내 경시대회 계열:
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control number" name="awardsCnt3" id="awardsCnt3"
+                                                       placeholder="숫자만 입력"
+                                                       value="0">
+                                            </div>
+                                        </td>
+                                        <td>회</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            대외 경시대회 계열:
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control number" name="awardsCnt4" id="awardsCnt4"
+                                                       placeholder="숫자만 입력"
+                                                       value="0">
+                                            </div>
+                                        </td>
+                                        <td>회</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            기타계열:
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control number" name="awardsCnt5" id="awardsCnt5"
+                                                       placeholder="숫자만 입력"
+                                                       value="0">
+                                            </div>
+                                        </td>
+                                        <td>회</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class="bar"></div>
+
+
+                                <!-- 임원 횟수 -->
+                                <div class="form-desc">
+                                    <div class="form-label">
+                                        <span>
+                                          <strong>6. 임원 횟수</strong>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <table class="input-table">
+                                    <colgroup>
+                                        <col width="66%"/>
+                                        <col width="50px"/>
+                                        <col />
+                                    </colgroup>
+                                    <tbody>
+                                    <tr>
+                                        <td colspan="2">
+                                            * 학생회장, 부학생회장, 기타 학생회 임원 횟수
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>학급</td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control number" name="executiveCnt"
+                                                       id="excutiveCnt" placeholder="숫자만 입력" value="0">
+                                            </div>
+                                        </td>
+                                        <td>회</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+{% endif %}
+
+{% if current_chk|add:0 == 3 %}
+   <div class="selfCheckForm">
+                    <form method="post" name=avgform2 action="/save_chk2/">
+                        <input type="hidden" name="_csrf" value="ca244da4-7266-4e12-9c2a-bcd8185efa4f"/>
+                        <div id="selfcheck4">
+                            <div class="form-group">
+                                <!-- 동아리 활동 시간 -->
+                                <div class="form-desc">
+                                    <div class="form-label">
+                                        <span>
+                                          <strong>8. 자율 동아리 활동 횟수</strong>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <table class="input-table">
+                                    <colgroup>
+                                        <col width="50%"/>
+                                        <col width="40%"/>
+                                        <col width="50px"/>
+                                    </colgroup>
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            국어영역계열
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control number" name="circlesCnt" id="circlesCnt"
+                                                       value="0"
+                                                       placeholder="숫자만 입력">
+                                            </div>
+                                        </td>
+                                        <td>회</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            수학영역계열
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control number" name="circlesCnt2"
+                                                       id="circlesCnt2" value="0"
+                                                       placeholder="숫자만 입력">
+                                            </div>
+                                        </td>
+                                        <td>회</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            영어영역계열
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control number" name="circlesCnt3"
+                                                       value="0" id="circlesCnt3"
+                                                       placeholder="숫자만 입력">
+                                            </div>
+                                        </td>
+                                        <td>회</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            사회영역계열
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control number" name="circlesCnt4"
+                                                       value="0" id="circlesCnt4"
+                                                       placeholder="숫자만 입력">
+                                            </div>
+                                        </td>
+                                        <td>회</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            과학영역계열
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control number" name="circlesCnt5"
+                                                       value="0" id="circlesCnt5"
+                                                       placeholder="숫자만 입력">
+                                            </div>
+                                        </td>
+                                        <td>회</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            체육영역계열
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control number" name="circlesCnt6"
+                                                       value="0" id="circlesCnt6"
+                                                       placeholder="숫자만 입력">
+                                            </div>
+                                        </td>
+                                        <td>회</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            제2외국어영역계열
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control number" name="circlesCnt8"
+                                                       value="0" id="circlesCnt8"
+                                                       placeholder="숫자만 입력">
+                                            </div>
+                                        </td>
+                                        <td>회</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            기타계열
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control number" name="circlesCnt7"
+                                                       value="0" id="circlesCnt7"
+                                                       placeholder="숫자만 입력">
+                                            </div>
+                                        </td>
+                                        <td>회</td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                                <div class="bar"></div>
+                                <!-- 봉사활동 누계시간 -->
+                                <div class="form-desc">
+                                    <div class="form-label">
+                                        <span>
+                                          <strong>9. 봉사활동 누계시간</strong>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <table class="input-table">
+                                    <colgroup>
+                                        <col width="50%"/>
+                                        <col width="40%"/>
+                                        <col width="50px"/>
+                                    </colgroup>
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            교내 단체활동
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control number" name="volunteerTime"
+                                                       value="1" id="volunteerTime"
+                                                       placeholder="숫자만 입력">
+                                            </div>
+                                        </td>
+                                        <td>시간</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            개인활동
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control number" name="volunteerTime2" id="volunteerTime2"
+                                                       value="0"
+                                                       placeholder="숫자만 입력">
+                                            </div>
+                                        </td>
+                                        <td>시간</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div class="bar"></div>
+                                <!-- 독서활동 횟수 -->
+                                <div class="form-desc">
+                                    <div class="form-label">
+                                        <span>
+                                          <strong>10. 독서활동 상황</strong>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <table class="input-table">
+                                    <colgroup>
+                                        <col width="50%"/>
+                                        <col width="40%"/>
+                                        <col width="50px"/>
+                                    </colgroup>
+                                    <tbody>
+                                    <tr>
+                                        <td>국어영역</td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control number" name="readingCnt"
+                                                       value="0" id="readingCnt"
+                                                       placeholder="숫자만 입력">
+                                            </div>
+                                        </td>
+                                        <td>권</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>수학영역</td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control number" name="readingCnt2"
+                                                       value="0" id="readingCnt2"
+                                                       placeholder="숫자만 입력">
+                                            </div>
+                                        </td>
+                                        <td>권</td>
+                                    </tr>
+                                    <tr>
+                                        <td>영어영역</td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control number" name="readingCnt3"
+                                                       value="0" id="readingCnt3"
+                                                       placeholder="숫자만 입력">
+                                            </div>
+                                        </td>
+                                        <td>권</td>
+                                    </tr>
+                                    <tr>
+                                        <td>사회영역</td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control number" name="readingCnt4"
+                                                       value="0" id="readingCnt4"
+                                                       placeholder="숫자만 입력">
+                                            </div>
+                                        </td>
+                                        <td>권</td>
+                                    </tr>
+                                    <tr>
+                                        <td>과학영역</td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control number" name="readingCnt5"
+                                                       value="0" id="readingCnt5"
+                                                       placeholder="숫자만 입력">
+                                            </div>
+                                        </td>
+                                        <td>권</td>
+                                    </tr>
+                                    <tr>
+                                        <td>제2외국어영역</td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control number" name="readingCnt7"
+                                                       value="0" id="readingCnt7"
+                                                       placeholder="숫자만 입력">
+                                            </div>
+                                        </td>
+                                        <td>권</td>
+                                    </tr>
+                                    <tr>
+                                        <td>기타영역</td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control number" name="readingCnt6"
+                                                       value="0" id="readingCnt6"
+                                                       placeholder="숫자만 입력">
+                                            </div>
+                                        </td>
+                                        <td>권</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+</div>
+                               
+                    </div>
+{% endif %}
+<!-- 앞에서 얻은 값들 체크해서 저장해야?? -->
+
+
+{% if current_chk|add:0 == 4 %}
+
+{% if chk_value %}
+{% for s in chk_value|slice:":1" %}
+
+<div>
+        <div class="container">
+            <div class="content">
+                <div class="title">
+                    <h1>final check</h1>
+                </div>
+
+                <div id="selfcheckresult">
+                    <table class="result-table">
+                        <colgroup>
+                            <col width="35%"/>
+                            <col width="65%"/>
+                        </colgroup>
+                        <tr>
+                            <th>USER ID</th>
+                            <td>
+                                <span>{{s.user.username}}</span>
+                            </td>
+                            
+                        </tr>
+                        <tr>
+                            <th>지역/특수목적대학</th>
+                            <td>
+                                <span>{% if s.preferwhere1|add:0 != -1 %} {{s.preferwhere1}} <br>{% endif %}{% if s.preferwhere2|add:0 != -1 %} {{s.preferwhere2}}<br> {% endif %}{% if s.preferwhere3|add:0 != -1 %} {{s.preferwhere3}}{% endif %}</span>
+                            </td>
+                            
+                        </tr>
+                        <tr>
+                            <th>선호계열</th>
+                            <td>
+                                <span>{% if s.prefertype1|add:0 != -1 %} {{s.prefertype1}}<br> {% endif %}{% if s.prefertype2|add:0 != -1 %} {{s.prefertype2}}<br> {% endif %}{% if s.prefertype3|add:0 != -1 %} {{s.prefertype3}}<br> {% endif %}{% if s.prefertype4|add:0 != -1 %} {{s.prefertype4}}<br> {% endif %}{% if s.prefertype5|add:0 != -1 %} {{s.prefertype5}}<br> {% endif %}{% if s.prefertype6|add:0 != -1 %} {{s.prefertype6}}<br> {% endif %}{% if s.prefertype7|add:0 != -1 %} {{s.prefertype7}}{% endif %}</span>
+                            </td>
+                            
+                        </tr>
+                        <tr>
+                            <th>전교과 평균등급</th>
+                            <td><span>{{s.total_avgrate}}</span> 등급</td>
+                            
+                        </tr>
+                        <tr>
+                            <th>주요교과 평균등급</th>
+                            <td><span>{{s.main_avgrate}}</span> 등급</td>
+                        </tr>
+                        <tr>
+                            <th>무단 결석</th>
+                            <td><span>{{s.absent}}</span> 회</td>
+                        </tr>
+                        <tr>
+                            <th>수상 경력</th>
+                            <td>
+                                <span>{{s.award_cnt}}</span> 회
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>임원활동</th>
+                            <td>
+                                학급: <span>{{s.executive_cnt}}</span> 회
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>자율 동아리</th>
+                            <td>
+                                <span>{{s.circle_cnt}}</span> 회
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>봉사활동</th>
+                            <td><span>{{s.volunteer}}</span> 시간</td>
+                        </tr>
+                        <tr>
+                            <th>독서활동</th>
+                            <td><span>{{s.reading}}</span> 권</td>
+                        </tr>
+                    </table>
+
+                    <div class="selfCheckForm">
+                        <form method="post" action="#">
+                            <table class="final-table">
+                                <colgroup>
+                                    <col width="80">
+                                    <col width="90%">
+                                </colgroup>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input type="checkbox" class="form-check-input chk2">
+                                                   <span style="display:inline-block; width:500px;font-size:15px">입력 한 것에 틀림이 없음을 확인 합니다.</span>
+                                            </label>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                                </tbody>
+
+                            </table>
+                            <tr>
+                            <td>
+                                <a class="btn btn-secondary btn-block" onclick="return lastchk()">최종 제출하기</a>
+                            </td>
+                            </tr>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+{% else %}
+    <tr><td colspan="5"> not file </td></tr>
+{% endif %}
+
+
+{% endif %}
+
+<!-- js 부분 -->
+<script
+  src="https://code.jquery.com/jquery-1.4.4.min.js"
+  integrity="sha256-UXNk8tRRYvtQN0N7W2y5U9ANmys7ebqH2f5X6m7mBww="
+  crossorigin="anonymous">
+  </script>
+<script language="javascript">
+    // page1
+    function preferChk() {
+        var form = document.chk1form;
+                var gotoNext = false;
+                $.each($('.preferRegions'), function (idx, obj) {
+                    if ($(obj).val() !== "-1") {
+                        gotoNext = true;
+                        $(obj).focus();
+                        return false;
+                    }
+                });
+
+                if (!gotoNext) {
+                    alert("다음으로 넘어가기 위해서는 선호지역 1곳 이상을 필수로 선택 해야 합니다.");
+                    return false;
+                }
+
+                var cnt = 0;
+                var gotoNext = false;
+                $.each($('.preferColleges'), function (idx, obj) {
+                    if ($(obj).val() !== "-1") {
+                        cnt++;
+                    }
+                    if (cnt >= 2) {
+                        gotoNext = true;
+                        return false;
+                    }
+                });
+
+                if (!gotoNext) {
+                    alert("다음으로 넘어가기 위해서는 선호계열 2곳을 필수로 선택 해야 합니다.");
+                    return false;
+                }
+            form.submit();
+            //location.href='/searchWork?current_chk=2'
+        }
+
+    // page2
+      function ratechk() {  // 내신성적 빈 값 체크
+        var form = document.avgform;
+        if ($('#avgRate').val() == "") {
+            alert("전교과 평균 등급은 필수 입력 값 입니다.");
+            $('#avgRate').focus();
+            return false;
+        }
+        if (parseFloat($('#avgRate').val()) < 1.00) {
+            alert("1등급 이하는 입력 하실 수 없습니다.");
+            $('#avgRate').val("");
+            $('#avgRate').focus();
+            return false;
+        }
+        if (parseFloat($('#avgRate').val()) > 9.0) {
+            alert("9등급 이상는 입력 하실 수 없습니다.");
+            $('#avgRate').val("");
+            $('#avgRate').focus();
+            return false;
+        }
+        if ($('#avgRate2').val() == "") {
+            alert("전교과 평균 등급은 필수 입력 값 입니다.");
+            $('#avgRate2').focus();
+            return false;
+        }
+        if (parseFloat($('#avgRate2').val()) < 1.00) {
+            alert("1등급 이하는 입력 하실 수 없습니다.");
+            $('#avgRate2').val("");
+            $('#avgRate2').focus();
+            return false;
+        }
+        if (parseFloat($('#avgRate2').val()) > 9.0) {
+            alert("9등급 이상는 입력 하실 수 없습니다.");
+            $('#avgRate2').val("");
+            $('#avgRate2').focus();
+            return false;
+        }
+        
+        //임시저장 클릭 시 cookie - absent,수상경력 등 page2
+        jQuery(function($){
+            $.cookie('absent', $('#inputAbsent').val(), { expires: 90, path: '/'});
+            $.cookie('awardsCnt', $('#awardsCnt').val(), { expires: 90, path: '/'});
+            $.cookie('awardsCnt2', $('#awardsCnt2').val(), { expires: 90, path: '/'});
+            $.cookie('awardsCnt3', $('#awardsCnt3').val(), { expires: 90, path: '/'});
+            $.cookie('awardsCnt4', $('#awardsCnt4').val(), { expires: 90, path: '/'});
+            $.cookie('awardsCnt5', $('#awardsCnt5').val(), { expires: 90, path: '/'});
+            $.cookie('excutiveCnt', $('#excutiveCnt').val(), { expires: 90, path: '/'});
+        });
+        form.submit();
+}
+    function circlechk(){
+        var form2 = document.avgform2;
+        jQuery(function($){
+            $.cookie('circlesCnt', $('#circlesCnt').val(), { expires: 90, path: '/'});
+            $.cookie('circlesCnt2', $('#circlesCnt2').val(), { expires: 90, path: '/'});
+            $.cookie('circlesCnt3', $('#circlesCnt3').val(), { expires: 90, path: '/'});
+            $.cookie('circlesCnt4', $('#circlesCnt4').val(), { expires: 90, path: '/'});
+            $.cookie('circlesCnt5', $('#circlesCnt5').val(), { expires: 90, path: '/'});
+            $.cookie('circlesCnt6', $('#circlesCnt6').val(), { expires: 90, path: '/'});
+            $.cookie('circlesCnt7', $('#circlesCnt7').val(), { expires: 90, path: '/'});
+            $.cookie('circlesCnt8', $('#circlesCnt8').val(), { expires: 90, path: '/'});
+            $.cookie('volunteerTime', $('#volunteerTime').val(), { expires: 90, path: '/'});
+            $.cookie('volunteerTime2', $('#volunteerTime2').val(), { expires: 90, path: '/'});
+            $.cookie('readingCnt', $('#readingCnt').val(), { expires: 90, path: '/'});
+            $.cookie('readingCnt2', $('#readingCnt2').val(), { expires: 90, path: '/'});
+            $.cookie('readingCnt3', $('#readingCnt3').val(), { expires: 90, path: '/'});
+            $.cookie('readingCnt4', $('#readingCnt4').val(), { expires: 90, path: '/'});
+            $.cookie('readingCnt5', $('#readingCnt5').val(), { expires: 90, path: '/'});
+            $.cookie('readingCnt6', $('#readingCnt6').val(), { expires: 90, path: '/'});
+            $.cookie('readingCnt7', $('#readingCnt7').val(), { expires: 90, path: '/'});
+        });
+        form2.submit();
+    }
+
+//cookie
+$(document).ready(function() {
+    jQuery.cookie = function(name, value, options) {
+    if (typeof value != 'undefined') { // name and value given, set cookie
+        options = options || {};
+        if (value === null) {
+            value = '';
+            options.expires = -1;
+        }
+        var expires = '';
+        if (options.expires && (typeof options.expires == 'number' || options.expires.toUTCString)) {
+            var date;
+            if (typeof options.expires == 'number') {
+                date = new Date();
+                date.setTime(date.getTime() + (options.expires * 24 * 60 * 60 * 1000));
+            } else {
+                date = options.expires;
+            }
+            expires = '; expires=' + date.toUTCString(); // use expires attribute, max-age is not supported by IE
+        }
+        var path = options.path ? '; path=' + (options.path) : '';
+        var domain = options.domain ? '; domain=' + (options.domain) : '';
+        var secure = options.secure ? '; secure' : '';
+        document.cookie = [name, '=', encodeURIComponent(value), expires, path, domain, secure].join('');
+    } else { // only name given, get cookie
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+};
+    if($.cookie('absent') != null) {
+        $('#inputAbsent').val($.cookie('absent'));
+        $('#awardsCnt').val($.cookie('awardsCnt'));
+        $('#awardsCnt2').val($.cookie('awardsCnt2'));
+        $('#awardsCnt3').val($.cookie('awardsCnt3'));
+        $('#awardsCnt4').val($.cookie('awardsCnt4'));
+        $('#awardsCnt5').val($.cookie('awardsCnt5'));
+        $('#excutiveCnt').val($.cookie('excutiveCnt'));   
+    }
+
+    if($.cookie('circlesCnt') != null) {
+        $('#circlesCnt').val($.cookie('circlesCnt'));   
+        $('#circlesCnt2').val($.cookie('circlesCnt2'));   
+        $('#circlesCnt3').val($.cookie('circlesCnt3'));   
+        $('#circlesCnt4').val($.cookie('circlesCnt4'));   
+        $('#circlesCnt5').val($.cookie('circlesCnt5'));   
+        $('#circlesCnt6').val($.cookie('circlesCnt6'));   
+        $('#circlesCnt7').val($.cookie('circlesCnt7'));   
+        $('#circlesCnt8').val($.cookie('circlesCnt8'));   
+
+        $('#volunteerTime').val($.cookie('volunteerTime'));   
+        $('#volunteerTime2').val($.cookie('volunteerTime2'));   
+        $('#readingCnt').val($.cookie('readingCnt'));   
+        $('#readingCnt2').val($.cookie('readingCnt2'));   
+        $('#readingCnt3').val($.cookie('readingCnt3'));   
+        $('#readingCnt4').val($.cookie('readingCnt4'));   
+        $('#readingCnt5').val($.cookie('readingCnt5'));   
+        $('#readingCnt6').val($.cookie('readingCnt6'));   
+        $('#readingCnt7').val($.cookie('readingCnt7'));
+    }
+});
+
+// last page
+    function lastchk(){
+        if (!$('.chk2').is(':checked')) {
+            alert('약관에 동의해주세요.');
+            $('.chk2').focus();
+            return false;   // false
+        }
+         jQuery(function($){    //쿠키삭제 부분
+           //$.removeCookie('readingCnt7', { path: '/' });
+//           alert('쿠키삭제!');
+        });
+        location.href='/search_result/';    
+}
+
+// page3
+
+</script>
+    <!-- Pagination -->
+    <br>
+    <!-- search_work page index  -->
+    <ul class="pagination justify-content-center mb-4">
+        <table>
+            <tr>
+                <td>
+                    <a class="btn btn-secondary btn-block {% if current_chk|add:0 == 1 %}disabled{% endif %}" href = "{% if current_chk|add:0 == 2 %}/searchWork?current_chk=1{% endif %}{% if current_chk|add:0 == 3 %}/searchWork?current_chk=2{% endif %}{% if current_chk|add:0 == 4 %}/searchWork?current_chk=3{% endif %}">이전단계(prev)</a>
+                </td>
+                <td>
+                    <input type=button value="임시저장(next)" class="btn btn-secondary btn-block {% if current_chk|add:0 == 4 %}disabled{% endif %}" onclick="return {% if current_chk|add:0 == 1 %}preferChk(){% endif %}{% if current_chk|add:0 == 2 %}ratechk(){% endif %}{% if current_chk|add:0 == 3 %}circlechk(){% endif %}"></a>
+                </td>
+            </tr>
+        </table>
+    </ul>
+
+  </div>
+
+  </div>
+  <!-- /.container -->
+  {% else %}
+
+  <script type="text/javascript">
+    alert('로그인이 필요합니다! \n로그인 화면으로 이동합니다.')
+    window.location.href = '/login';
+  </script>
+{% endif %}
+{% endblock %}

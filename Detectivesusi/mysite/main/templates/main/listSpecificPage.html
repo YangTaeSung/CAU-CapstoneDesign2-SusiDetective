@@ -1,0 +1,91 @@
+{% extends "main/layout.html" %}
+{% block content %}
+{% load static %}
+
+ <div class="container">
+
+ <!-- Page Heading/Breadcrumbs -->
+    <h1 class="mt-4 mb-3">Notice
+    </h1>
+
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="{% url 'main:home'%}">Home</a>
+      </li>
+      <li class="breadcrumb-item active">Notice</li>
+    </ol>
+
+
+    <CENTER>
+        <div>
+     
+<table cellspacing=1 width=1100 border=0 >
+    <tr>
+    <!-- 글쓰기 버튼 -->
+    <td><input type=button value="글쓰기"  OnClick="window.location='/show_write_form'"></td>
+    </tr>
+    <tr>
+        <td><b>총 게시물수: {{ totalCnt }}</b></td>
+        <td><p align=right><b> 페이지:{{ current_page }}</b></p>
+        </td>
+    </tr>
+</table>
+
+<table cellspacing=1 width=700 border=1 class="table table-striped">
+    <thead>
+    <tr>
+        <td width=50><p align=center><b>#</b></p>
+        </td>
+        <td width=320><p align=center><b>Subject</b></p>
+        </td>
+        <td width=100><p align=center><b>date</b></p>
+        </td>
+        <td width=100><p align=center><b>views</b></p>
+        </td>
+    </tr>
+</thead>
+    {% if boardList %}
+        <ul>
+            {% for boardRow in boardList %}
+            <tr>
+            <td width=50><p align=center>{{ boardRow.id }}</p></td>
+            <td width=320>
+                <p align=center>
+                    <a href="/viewWork?memo_id={{ boardRow.id }}&current_page={{ current_page }}&searchStr=None" title="{{ boardRow.memo}}">{{ boardRow.subject }}</a>
+                </p>
+            </td>
+            <td width=100><p align=center>{{ boardRow.created_date }}</p></td>
+            <td width=100><p align=center>{{ boardRow.hits }}</p></td>
+            </tr>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</table>
+
+
+<table cellspacing=1 width=700 border=1 class = "table">
+    <tr>
+        <td>
+        {% for page in totalPageList %}
+            <a href="/listSpecificPageWork?current_page={{page}}" >
+            [
+            {% ifequal page current_page %}
+                <b>
+            {% endifequal %}
+            {{page}}
+
+            {% ifequal page current_page  %}
+                </b>
+            {% endifequal %}
+            ]
+        </a>
+        {% endfor %}
+        </td>
+    </tr>
+
+</table>
+</div>
+</CENTER>
+
+</div>
+{% endblock %}

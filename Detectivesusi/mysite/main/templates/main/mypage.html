@@ -1,0 +1,601 @@
+{% extends "main/layout.html" %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/isu.css' %}">
+  <!-- Page Content -->
+  <div class="container">
+
+    <!-- Page Heading/Breadcrumbs -->
+    <h1>　</h1>
+    <h1 class="mt-4 mb-3">Mypage</h1>
+
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="{% url 'main:home' %}">Home</a>
+      </li>
+      <li class="breadcrumb-item active">Mypage</li>
+    </ol>
+  <!-- /.container -->
+  {% if user.is_authenticated %}
+  <script>
+    /*카테고리 확인*/
+
+var stdScoreType = '';
+
+function gotograde(tp){
+      location.replace("/mypage?igrade="+tp);
+}
+function showgrade(tp){
+      location.replace("/mypage?igrade="+tp);
+}
+</script>
+<p class="search_box_text  mgt25"><span class="f_pit"> *</span> 1학년 1학기는 필수 입력이며, 학기 별 이수과목 모두를 작성해주시기 바랍니다.</p>
+<!-- 학생부성적 -->
+<div>                                   
+    <table class="list_tbl02">
+    <caption>학생부성적</caption>
+        <colgroup>                                  
+            <col style="width:10%">
+            <col style="width:10%"> 
+            <col style="width:10%"> 
+            <col style="width:10%">
+            <col style="width:10%">     
+            <col style="width:10%">     
+            <col style="width:20%">     
+            <col style="width:20%">
+        </colgroup>
+        <thead>
+            <tr>
+                <th colspan="2" scope="col"><center>1학년</center></th>
+                <th colspan="2" scope="col"><center>2학년</center></th>
+                <th colspan="2" scope="col"><center>3학년</center></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <p class="p_text">1학기<span class="f_pit"> *</span></p> 
+                    <p><a href="javascript:showgrade('11')" class="btn_compare_off" title="보기">보기</a>
+                    <a href="javascript:gotograde('11')" class="btn_ing" title="입력">입력</a></p>
+
+                </td>
+                <td>
+                    <p class="p_text">2학기 </p>
+                    <p><a href="javascript:showgrade('12')" class="btn_compare_off" title="보기">보기</a>
+                    <a href="javascript:gotograde('12')" class="btn_ing" title="입력">입력</a></p>
+                </td><td>
+                    <p class="p_text">1학기</p> 
+                    <p><a href="javascript:showgrade('21')" class="btn_compare_off" title="보기">보기</a>
+                    <a href="javascript:gotograde('21')" class="btn_ing" title="입력">입력</a></p>
+                </td>
+                <td>
+                    <p class="p_text">2학기</p> 
+                    <p><a href="javascript:showgrade('22')" class="btn_compare_off" title="보기">보기</a>
+                    <a href="javascript:gotograde('22')" class="btn_ing" title="입력">입력</a></p>
+                </td>
+                <td>
+                    <p class="p_text">1학기</p> 
+                    <p><a href="javascript:showgrade('31')" class="btn_compare_off" title="보기">보기</a>
+                    <a href="javascript:gotograde('31')" class="btn_ing" title="입력">입력</a></p>
+                </td>
+                <td>
+                    <p class="p_text">2학기</p> <!-- btn_compare_off -->
+                    <p><a href="javascript:showgrade('32')" class="btn_compare_off" title="보기">보기</a>
+                    <a href="javascript:gotograde('32')" class="btn_ing" title="보기">입력</a></p>
+                </td>                               
+            </tr>                                       
+        </tbody>
+    </table>
+</div>
+<!-- //학생부성적 -->
+<div id="scoreDetailView" class="table_box4 mgt25">
+
+<style type="text/css">
+#sgcTblBd input[type="text"]{text-align: center;}
+@charset "utf-8";
+/* CSS reset */
+html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+abbr, address, cite, code,
+del, dfn, em, img, ins, kbd, q, samp,
+small, strong, sub, sup, var,
+b, i, label,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section, summary,
+time, mark, audio, video
+ {
+    margin:0;
+    padding:0;
+    border:0;
+    outline:0;
+    vertical-align:middle;
+    align-content: middle;
+    background:transparent;
+    font-family:"맑은 고딕", Malgun Gothic, NanumGothic, dotum, sans-serif;
+}
+</style>
+<script>
+$(document).ready(function() {
+    });
+
+function fn_check_num(str_val, type){
+    var check_num = /^\d*$/;
+    var check_dot_num = /^\d*(\.?\d*)$/;
+    
+    var bNum ;
+    
+    if(type == 1) bNum= check_num.test(str_val);
+    else bNum= check_dot_num.test(str_val);
+    
+    if(bNum) {
+        return false;
+    }
+    return true;
+}
+
+//숫자 입력
+function isNum(inputValue, min, max){
+    var checkCode = inputValue.value.charCodeAt(inputValue.value.length-1);
+    var str;
+    
+    if(inputValue.value.length > 0 && !(checkCode >=48 && checkCode <=57)){
+        alert("숫자만 입력가능합니다.");
+        
+        var thisLength = inputValue.value.length;
+        for(var i=0; i<thisLength; i++){
+            checkCode_for = inputValue.value.charCodeAt(inputValue.value.length-1);
+            if(!(checkCode_for >= 48 && checkCode_for <=57)){
+                str = inputValue.value.substring(0, inputValue.value.length-1);
+                inputValue.value = str;
+            }
+        }
+        inputValue.focus();
+        return false;
+    }else if(inputValue.value.length = 0 || checkCode >= 48 && checkCode <=57){
+        if(typeof min === 'number' && typeof max === 'number'){
+            var v = Number(inputValue.value);
+            if(v < min || v > max) {
+                alert(min + ' ~ ' + max + ' 사이의 값만 사용 가능합니다.');
+                str = inputValue.value.substring(0, (max-1).toString().length);
+                inputValue.value = str;
+                return false;
+            }
+        }
+        inputValue.focus();
+    }
+}
+
+function btn_upd_onclick(rid)
+{
+    var courseSn = $("#course-"+rid).val();
+    var sbjectSn = $("#sbject-"+rid).val();
+    
+    var unit = $("#unit-"+rid).val();
+    var grde = $("#grde-"+rid).val();
+    var org = $("#org-"+rid).val();
+    var avg = $("#avg-"+rid).val();
+    var std = $("#std-"+rid).val();
+    var cnt = $("#cnt-"+rid).val();
+    var cmpl = $("#cmpl-"+rid).val();
+        
+    $("#changeFlag").val("1");
+    var strRow = getEditRow(rid,courseSn,sbjectSn,unit,grde,org,avg,std,cnt,cmpl)
+     
+    $("#row-"+rid).html(strRow);
+    
+    gfn_Submission_Call("", $("#stdptSesScr").serialize(), function(data){
+        if(data != null){
+            var dataResultList = data.resultList;
+            if (data.resultVO.resultCode == "SUCCESS"){
+                var courseList = $("#course-"+rid);
+                courseList.empty();
+                
+                if(dataResultList != ""){
+                    courseList.append("<option value=''>교과선택</option>");
+                    for(var i =0; i < dataResultList.length; i++){
+                        var strRow = "";
+                        if(gfn_nvl(dataResultList[i].course_sn) == courseSn){
+                            strRow += "<option value='"+gfn_nvl(dataResultList[i].course_sn)+"' selected>"+gfn_nvl(dataResultList[i].course_nm)+"</option>";
+                        } else {
+                            strRow += "<option value='"+gfn_nvl(dataResultList[i].course_sn)+"'>"+gfn_nvl(dataResultList[i].course_nm)+"</option>"; 
+                        }
+                        
+                        courseList.append(strRow);
+                    }
+                }
+            }else{
+                alert(data.resultVO.resultMessage);
+            }
+        }
+    }
+    , "json");
+        
+    $("#changeFlag").val("1");
+    gfn_Submission_Call("="+courseSn, $("#stdptSesScr").serialize(), function(data){
+        if(data != null){
+            var dataResultList = data.resultList;
+            if (data.resultVO.resultCode == "SUCCESS"){
+                
+                var sbjectList = $("#sbject-"+rid);             
+                sbjectList.empty();
+                if(dataResultList != ""){
+                    sbjectList.append("<option value=''>과목선택</option>");
+                    for(var i =0; i < dataResultList.length; i++){
+                        var strRow = "";
+                        if(gfn_nvl(dataResultList[i].sbject_sn) == sbjectSn){
+                            strRow += "<option value='"+gfn_nvl(dataResultList[i].sbject_sn)+"' selected >"+gfn_nvl(dataResultList[i].sbject_nm)+"</option>";   
+                        } else {
+                            strRow += "<option value='"+gfn_nvl(dataResultList[i].sbject_sn)+"'>"+gfn_nvl(dataResultList[i].sbject_nm)+"</option>";
+                        }   
+                        sbjectList.append(strRow);
+                    }
+                }
+            }else{
+                alert(data.resultVO.resultMessage);
+            }
+        }
+    }
+    , "json");
+}
+
+function btn_delete_onclick(row){
+    if(confirm("삭제하시겠습니까?")) {
+        $("#changeFlag").val("1");
+        $("#row-"+row).remove();
+    }
+}
+
+function btn_delete2_onclick(row){
+    if(confirm("삭제하시겠습니까?")) {
+        $("#saved_row-"+row).remove();
+        location.href='/igrade_del/?igrade={{igrade}}&id='+row;
+    }
+
+}
+
+function btn_save_onclick(){
+  var form = document.stdptSesScr;
+    if($("#changeFlag").val() != 1){
+        return;
+    }
+    var pattern = /^\d+(?:[.]?[\d]?[\d])?$/;
+    var rsize = $("#sgcTblBd tr").length;
+    var ids = [];
+    $("#sgcTblBd tr").each(function(idx, e){
+        var idspl = $(e).attr('id').split('-');
+        ids.push(idspl[1]);
+    });
+    $("#sgrd_keys").val(ids.join(','));
+    
+    for(var r=0; r<rsize; r++){
+        var i=ids[r];
+        var course = $("#course-"+i);
+        var sbject = $("#sbject-"+i);
+        
+        var unit = $("#unit-"+i);
+        var grde = $("#grde-"+i);
+        
+        if(course.val() == "") {
+            alert("교과를 선택해 주십시오.");
+            course.focus();
+            return;
+        }
+                
+        if(sbject.val() == "") {
+            alert("과목을 선택해 주십시오.");
+            sbject.focus();
+            return;
+        }  
+        
+        if(fn_check_num(unit.val(), 1) && unit.val() != "" && typeof unit.val() != "undefined") {
+            alert("단위수는 숫자만 입력해 주십시오.");
+            unit.focus();
+            check_valid = 1;
+            return;
+        }
+        
+        if(fn_check_num(grde.val(), 1) && grde.val() != "" && typeof grde.val() != "undefined") {
+            alert("석차등급은 숫자만 입력해 주십시오.");
+            grde.focus();
+            return;
+        }
+    }
+    $("#sgrd_rcount").val(rsize);
+    form.submit();
+}
+
+function sel_course_onchange(courseId, courseSn)
+{
+    $("#changeFlag").val("1");
+    gfn_Submission_Call(""+courseSn, $("#stdptSesScr").serialize(), function(data){
+        if(data != null){
+            var dataResultList = data.resultList;
+            if (data.resultVO.resultCode == "SUCCESS"){
+                var sbjectList = $("#sbject-" + courseId);              
+                sbjectList.empty();
+                
+                if(dataResultList != ""){
+                    sbjectList.append("<option value=''>과목선택</option>");
+                    for(var i =0; i < dataResultList.length; i++){
+                        var strRow = "";
+                        strRow += "<option value='"+gfn_nvl(dataResultList[i].sbject_sn)+"''>"+gfn_nvl(dataResultList[i].sbject_nm)+"</option>";
+                        sbjectList.append(strRow);
+                    }
+                }
+            }else{
+                alert(data.resultVO.resultMessage);
+            }
+        }
+    }
+    , "json");
+}
+/* 선택교과별 과목 선택 */
+function setcate(rid){
+    var g1 = ["과목선택","국어I","국어II","화법과 작문", "독서와 문법", "문학", "고전", "화법과 작문I", "화법과 작문II", "독서와 문법I","독서와 문법II", "문학I","문학II","국어","문학개론","문장론","고전문학","통합국어I","매체와 문학","희곡 창작","소설 창작","시 창작 입문"];
+    var g2 = ["과목선택","기초 수학", "수학I", "수학II","확률과 통계", "미적분I","미적분II","기하와 벡터","고급수학I","고급수학II","수학의활용","고급수학","인문통합수학","자연통합수학"];
+    var g3 = ["과목선택","기초 영어","실용영어I","실용영어II","실용영어 회화","실용 영어 독해와 작문","영어I","영어II","영어회화","심화영어","심화영어회화I","심화영어회화II","영어","영어문법","영어강독","영어작문"];
+    var g4 = ["과목선택","한국 지리","세계 지리","한국사","동아시아사","세계사","경제","법과 정치","사회·문화","국제 정치","국제 경제","국제 관계와 국제 기구","세계 문제","비교 문화","사회 과학 방법론","한국의 사회와 문화","국제법","지역 이해","인류의 미래 사회"];
+    var g5 = ["과목선택","과학","물리Ⅰ","물리Ⅱ","화학Ⅰ","화학Ⅱ","생명 과학Ⅰ","생명 과학Ⅱ","지구 과학Ⅰ","지구 과학Ⅱ","고급 물리","물리 실험","고급 화학","화학 실험","고급 생명 과학","생명 과학 실험"];
+    var g6 = ["과목선택","운동과 건강 생활","스포츠 문화","스포츠 과학","스포츠 개론","체육과 진로 탐구","육상 운동","체조 운동","수상 운동","개인 및 대인 운동","단체 운동","체력 운동"];
+    var changeItem;
+    if($("#cmpl-"+rid).val() == "국어"){
+      changeItem=g1;
+    }
+    else if($("#cmpl-"+rid).val() == "수학"){
+      changeItem=g2;
+    }
+    else if($("#cmpl-"+rid).val() == "영어"){
+      changeItem=g3;
+    }
+    else if($("#cmpl-"+rid).val() == "사회"){
+      changeItem=g4;
+    }
+    else if($("#cmpl-"+rid).val() == "과학"){
+      changeItem=g5;
+    }
+    else if($("#cmpl-"+rid).val() == "예체능"){
+      changeItem=g6;
+    }
+    $('#sbject-'+rid).empty();
+
+    for(var count = 0; count < changeItem.length; count++){                
+        var option = $("<option>"+changeItem[count]+"</option>");
+        $("#sbject-"+rid).append(option);
+    }
+}
+
+
+function getEditRow(rid,courseSn,sbjectSn,unit,grde,org,avg,std,cnt,cmpl){
+    console.log('typeof', typeof cmpl);
+    return  '<td>'+rid+'</td>'
+     + '<td id="course-c-'+rid+'">'
+     + '<label class="tts" for="course-'+rid+'">추가할 교과 선택</label>'
+     +'<select id="cmpl-'+rid+'" name="cmpl-'+rid+'" class="w60" onchange="setcate('+rid+')">'
+     + ((typeof cmpl === 'string') ?
+         '<option value="-"'+((cmpl == '-')?' selected':'')+'>선택</option>'
+         + '<option value="국어"'+((cmpl == '국어')?' selected':'')+'>국어</option>'
+         + '<option value="수학"'+((cmpl == '수학')?' selected':'')+'>수학</option>'
+         + '<option value="영어"'+((cmpl == '영어')?' selected':'')+'>영어</option>'
+         + '<option value="사회"'+((cmpl == '사회')?' selected':'')+'>사회</option>'
+         + '<option value="과학"'+((cmpl == '과학')?' selected':'')+'>과학</option>'
+         + '<option value="예체능"'+((cmpl == '예체능')?' selected':'')+'>예체능</option>'
+         : 
+         + '<option value="-">선택</option>'
+         + '<option value="국어">국어</option>'
+         + '<option value="수학">수학</option>'
+         + '<option value="영어">영어</option>'
+         + '<option value="사회">사회</option>'
+         + '<option value="과학">과학</option>'
+         + '<option value="예체능">예체능</option>'
+     )
+     + '</select>'
+     + '</td>'
+     + '<td id="sbject-c-'+rid+'">'
+     + '<label class="tts" for="sbject-'+rid+'">추가 할 과목선택</label>'
+     + '<select class="w80" id="sbject-'+rid+'" name="sbject-'+rid+'" '+(sbjectSn != '' ? 'value="'+sbjectSn+'"': '')+'>'
+         + '<option>과목선택</option>'
+         // + '<option value="국어I">국어I</option>'
+         // + '<option value="적분과통계">적분과 통계</option>'
+         // + '<option value="기초회화">기초회화</option>'
+         // + '<option value="화학II">화학II</option>'
+     + '</select>'
+     + '</td>'
+     + '<td id="unit-c-'+rid+'">'
+     + '<label class="tts" for="unit-'+rid+'">단위수</label>' 
+     + '<input type="text"  id="unit-'+rid+'" name="unit-'+rid+'" class="w44" value="'+unit+'" onkeyup="isNum(this,0,99)"/>'
+     + '</td>'
+     + '<td id="grde-c-'+rid+'">'
+     + '<label class="tts" for="grde-'+rid+'">석차등급</label>' 
+     + '<input type="text" id="grde-'+rid+'" name="grde-'+rid+'" class="w44"  value="'+grde+'" onkeyup="isNum(this,1,9)"/>'
+     + '</td>'
+     + '<td>'
+     + '<button type="button" class="btnc_click05_1" onclick="btn_delete_onclick(\''+rid+'\');">삭제</button>'
+     + '</td>';
+}
+
+function btn_adit_onclick() {
+    
+    var rid = 1;
+    
+    if($("#sgcTblBd tr").get().length > 0){
+        rid = Number($("#sgcTblBd tr:last").attr("id").replace("row-","")) + 1;
+    }
+    
+    var strRow='<tr id="row-'+rid+'">'
+             + getEditRow(rid,'','','','','','','','','-')
+             + '</tr>';
+    $("#sgcTblBd").append(strRow);
+    
+    $("#changeFlag").val("1");
+    gfn_Submission_Call("/kcue/ast/eip/cun/mng/sgc/courseList.do", $("#stdptSesScr").serialize(), function(data){
+        if(data != null){
+            console.log(data);
+            var dataResultList = data.resultList;
+            if (data.resultVO.resultCode == "SUCCESS"){
+                var courseList = $("#course-"+rid);
+                courseList.empty();
+                $("#course-"+rid).focus();
+                
+                if(dataResultList != ""){
+                    courseList.append("<option value=''>교과선택</option>");
+                    for(var i =0; i < dataResultList.length; i++){
+                        var strRow = "";
+                        strRow += "<option value='"+gfn_nvl(dataResultList[i].course_sn)+"''>"+gfn_nvl(dataResultList[i].course_nm)+"</option>";
+                        courseList.append(strRow);
+                        $("#course-"+rid).focus();
+                    }
+                }
+            }else{
+                alert(data.resultVO.resultMessage);
+            }
+        }
+    }
+    , "json");
+}
+
+</script>
+
+{% if igrade|add:0 == 11 %}
+<h4>
+    1학년 1학기
+</h4>
+{% endif %}
+{% if igrade|add:0 == 12 %}
+<h4>
+    1학년 2학기
+</h4>
+{% endif %}
+{% if igrade|add:0 == 21 %}
+<h4>
+    2학년 1학기
+</h4>
+{% endif %}
+{% if igrade|add:0 == 22 %}
+<h4>
+    2학년 2학기
+</h4>
+{% endif %}
+{% if igrade|add:0 == 31 %}
+<h4>
+    3학년 1학기
+</h4>
+{% endif %}
+{% if igrade|add:0 == 32 %}
+<h4>
+    3학년 1학기
+</h4>
+{% endif %}
+{% if input_rs %}
+<!-- <script>
+  alert('데이터있음');
+</script> -->
+<table class="list_tbl02">
+    <caption>학생부성적 테이블</caption>
+    <colgroup>
+        <col style="width:10%">
+        <col style="width:10%">
+        <col style="width:10%">
+        <col style="width:10%">
+        <col style="width:10%">
+        <col style="width:10%">
+        <col style="width:7%">
+        <col style="width:7%">
+        <col style="width:7%">
+        <col style="width:10%">
+        <col style="width:*%">
+    </colgroup>
+    <thead>
+        <tr>
+            <!-- <th scope="col"><center>번호</center></th> -->
+            <th scope="col"><center>교과</center></th>
+            <th scope="col"><center>과목</center></th>
+            <th scope="col"><center>단위수<span class="f_pit"> *</span></center></th>
+            <th scope="col"><center>등급<span class="f_pit"> *</span></center></th>
+            <th scope="col"><center>관리</center></th>
+        </tr>
+    </thead>
+{% for s in input_rs %}
+    <tr id="saved_row-{{s.id}}">
+      <!-- <td>{{s.id}}</td> -->
+      <td id="{{s.id}}"><input type="hidden" id="{{s.id}}" name="{{s.id}}" value="C0001">{{s.subject1}}</td>
+      <td id="{{s.id}}"><input type="hidden" id="{{s.id}}" name="{{s.id}}" value="S0586">{{s.subject2}}</td>
+      <td id="{{s.id}}"><input type="hidden" id="{{s.id}}" name="{{s.id}}" value="2">{{s.complete_unit}}</td>
+      <td id="{{s.id}}"><input type="hidden" id="{{s.id}}" name="{{s.id}}" value="3">{{s.rate}}</td>
+      <td><button type="button" class="btnc_click05_{{s.id}}" onclick="btn_delete2_onclick({{s.id}});">삭제</button></td>
+    </tr>
+{% endfor %}
+</table><center>
+
+
+{% else %}
+<!-- <script>
+  alert('없음');
+</script> -->
+{% endif %}
+<!-- 학생부성적리스트 -->
+<form name="stdptSesScr" id="stdptSesScr" method="post" action="igradeWork/?igrade={{igrade}}">
+<input type="hidden" name="changeFlag" id="changeFlag" value="0">
+<input type="hidden" name="uid" id="sgrd_uid" value="20-1043555541">
+<input type="hidden" name="sgrd_se" id="sgrd_se" value="1">
+<input type="hidden" name="tp" id="sgrd_tp" value="31">
+<input type="hidden" name="rcount" id="sgrd_rcount" value="0">
+<input type="hidden" name="keys" id="sgrd_keys" value="">
+<table class="list_tbl02">
+    <caption>학생부성적 테이블</caption>
+    <colgroup>
+        <col style="width:6%">
+        <col style="width:17%">
+        <col style="width:17%">
+        <col style="width:7%">
+        <col style="width:7%">
+        <col style="width:7%">
+        <col style="width:7%">
+        <col style="width:7%">
+        <col style="width:7%">
+        <col style="width:10%">
+        <col style="width:*%">
+    </colgroup>
+    <thead>
+        <tr>
+            <th scope="col"><center>번호</center></th>
+            <th scope="col"><center>교과</center></th>
+            <th scope="col"><center>과목</center></th>
+            <th scope="col"><center>단위수<span class="f_pit"> *</span></center></th>
+            <th scope="col"><center>등급<span class="f_pit"> *</span></center></th>
+            <th scope="col"><center>관리</center></th>
+        </tr>
+    </thead>
+    <tbody id="sgcTblBd">
+    </tbody>
+</table><center>
+<button type="button" style='width:200px' class="btnc_click06" onclick="btn_adit_onclick()">추가하기 +</button></center>
+<span class="line_hr"></span>
+<div class="mgt35">
+    <ul class="con_list pd0">
+    <center>모든 내용은 저장을 누르셔야 반영됩니다.</center>
+    </ul></div>
+    <div class="align_c">
+      <button type="button" class="btnc_click02 w70" onclick="btn_save_onclick();">저장</button>
+    </div>
+</center>
+</form>
+</div>
+
+</div>
+
+  <form method="post">
+  {% csrf_token %}
+  {{ user_form.as_p }}
+  {{ profile_form.as_p }}
+  <!-- <button type="submit">Save changes</button> -->
+</form>
+  {% else %}
+  <script type="text/javascript">
+    alert('로그인이 필요합니다! \n로그인 화면으로 이동합니다.')
+    window.location.href = '/login';
+  </script>
+{% endif %}
+{% endblock %}

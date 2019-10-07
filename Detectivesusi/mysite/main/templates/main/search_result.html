@@ -1,0 +1,149 @@
+{% extends "main/layout.html" %}
+{% block content %}
+{% load static %}
+{% if messages %}
+<script>
+  alert('분석완료!');
+</script>
+{% endif%}
+<script>
+  function btn_show(s_id){
+        alert('해당 결과를 출력합니다.');
+        window.open('../hap/?id='+s_id,'_target','width=500,height=700');
+    }
+  </script>
+<iframe id="fileDown" style='visibility:hidden' src="" width="1" height="1"></iframe>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<div class="container">
+ <!-- Page Heading/Breadcrumbs -->
+    <h1 class="mt-4 mb-3">result
+    </h1>
+
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="{% url 'main:home'%}">Home</a>
+      </li>
+      <li class="breadcrumb-item active">result</li>
+    </ol>
+
+<div class="progress">
+  <div class="progress-bar" role="progressbar" aria-valuenow="40"
+  aria-valuemin="0" aria-valuemax="100" style="width:100%">
+    100%
+  </div>
+</div>
+<br>
+
+<div class="card">
+  <div class="card-header">
+   Show your search Result
+  </div>
+
+  <div class="card-body">
+    
+      <div class="accordion" id="myAccordion">
+         <div class="card">
+           <button style="width:100%" type="button" class="btn btn-warning" data-toggle="collapse" data-target="#collapsible-1" data-parent="#myAccordion">소신</button>
+           {% if uso_list %}
+           {% for s in uso_list %}
+          <div id="collapsible-1" class="collapse show">
+         
+          <div class="accordion" id="myAccordion-1">
+            <div class="panel">
+              <div class="card">
+                <center><button style="width:100%" type="button" class="btn btn-light" data-toggle="collapse" data-target="#collapsible-1s{{s.id}}" data-parent="#myAccordion-1">{{s.c_name}} {{s.d_name}}</button></center>
+                <div id="collapsible-1s{{s.id}}" class="collapse">
+                  <strong>지역 :</strong> <span>서울/인천/경기</span> <br>
+                  <strong>대학 :</strong> <span>{{s.c_name}}</span> <br>
+                  <strong>학과 :</strong> <span>{{s.d_name}}</span> <br>
+                  <strong>전형명 :</strong> <span>{{s.admission}}</span> <br>
+                  <strong>전형방법 :</strong> <span>{{s.ad_info}}</span> <br>
+                  <strong>3개년 수시 합격자 평균 :</strong> <span>{{s.cut_off}}</span> <br>
+                  <span class="badge badge-pill badge-info" onclick="btn_show({{s.id}})">합격자 수기 보기</span>
+                  <a href="../media/2020/{{s.c_name}}.pdf"><span class="badge badge-pill badge-info">2020년도 모집요강 보기</span></a><br/>
+                </div>
+             </div>
+            </div>
+        </div>
+        
+      </div>
+                  {% endfor%}
+            {% endif %}
+                  
+    </div>
+      
+    </div>
+  </div>
+    <div class="panel">
+          <div class="card">
+            <div class="card-body">
+              
+        <button style="width:100%" type="button" class="btn btn-info " data-toggle="collapse" data-target="#collapsible-2" data-parent="#myAccordion">적정</button>
+                   {% if o_list %}
+           {% for s in o_list %}
+        <div id="collapsible-2" class="collapse show">
+          <div class="accordion" id="myAccordion-2">
+            <div class="panel">
+                  <div class="card">
+              <center><button style="width:100%" type="button" class="btn btn-light" data-toggle="collapse" data-target="#collapsible-2s{{s.id}}" data-parent="#myAccordion-2">{{s.c_name}} {{s.d_name}}</button></center>
+              <div id="collapsible-2s{{s.id}}" class="collapse">
+                  <span>
+                  <strong>지역 :</strong> <span>서울/인천/경기</span> <br>
+                  <strong>대학 :</strong> <span>{{s.c_name}}</span> <br>
+                  <strong>학과 :</strong> <span>{{s.d_name}}</span> <br>
+                  <strong>전형명 :</strong> <span>{{s.admission}}</span> <br>
+                  <strong>전형방법 :</strong> <span>{{s.ad_info}}</span> <br>
+                  <strong>3개년 수시 합격자 평균 :</strong> <span>{{s.cut_off}}</span> <br>
+                  <span class="badge badge-pill badge-info" onclick="btn_show({{s.id}})">합격자 수기 보기</span>
+                  <a href="../media/2020/{{s.c_name}}.pdf"><span class="badge badge-pill badge-info">2020년도 모집요강 보기</span></a><br/>
+                  </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+                {% endfor%}
+            {% endif %}
+</div>
+</div>
+</div>
+
+    <div class="panel">
+      <div class="card">
+      <div class="card-body">
+        <button style="width:100%" type="button" class="btn btn-success" data-toggle="collapse" data-target="#collapsible-3" data-parent="#myAccordion">안정</button>
+        {% if so_list %}
+            {% for s in so_list %}
+        <div id="collapsible-3" class="collapse show">
+          <div class="accordion" id="myAccordion-3">
+            <div class="panel">
+              <div class="card">
+              <center><button style="width:100%" type="button" class="btn btn-light" data-toggle="collapse" data-target="#collapsible-3s{{s.id}}" data-parent="#myAccordion-3">{{s.c_name}} {{s.d_name}}</button></center>
+              <div id="collapsible-3s{{s.id}}" class="collapse">
+                  <span>
+                  <strong>지역 :</strong> <span>서울/인천/경기</span> <br>
+                  <strong>대학 :</strong> <span>{{s.c_name}}</span> <br>
+                  <strong>학과 :</strong> <span>{{s.d_name}}</span> <br>
+                  <strong>전형명 :</strong> <span>{{s.admission}}</span> <br>
+                  <strong>전형방법 :</strong> <span>{{s.ad_info}}</span> <br>
+                  <strong>3개년 수시 합격자 평균 :</strong> <span>{{s.cut_off}}</span> <br>
+                  <span class="badge badge-pill badge-info" onclick="btn_show({{s.id}})">합격자 수기 보기</span>
+                  <a href="../media/2020/{{s.c_name}}.pdf"><span class="badge badge-pill badge-info">2020년도 모집요강 보기</span><br/></a>
+                  </span>
+              </div>
+            
+            </div>
+          </div>
+          </div>
+        </div>
+                          {% endfor%}
+            {% endif %}
+      </div>
+    </div>  
+
+  </div>
+</div>
+</div>
+    <br>
+<br>
+    {% endblock %}
